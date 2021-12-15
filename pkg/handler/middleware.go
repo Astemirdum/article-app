@@ -19,9 +19,9 @@ func (h *Handler) UserIdentification(ctx *gin.Context) {
 		ErrorResponse(ctx, http.StatusUnauthorized, "empty header Authorization")
 		return
 	}
-	//headerToken = strings.Trim(headerToken, "\"")
+
 	headerTokenParts := strings.Split(headerToken, " ")
-	//log.Println(headerTokenParts)
+
 	if len(headerTokenParts) != 2 || headerTokenParts[0] != "Bearer" {
 		ErrorResponse(ctx, http.StatusUnauthorized, "invalid header Authorization")
 		return
@@ -33,7 +33,7 @@ func (h *Handler) UserIdentification(ctx *gin.Context) {
 	}
 	userId, err := h.services.ParseToken(token)
 	if err != nil {
-		ErrorResponse(ctx, http.StatusUnauthorized, "token invalid "+err.Error())
+		ErrorResponse(ctx, http.StatusUnauthorized, err.Error())
 		return
 	}
 	ctx.Set(idKey, userId)
