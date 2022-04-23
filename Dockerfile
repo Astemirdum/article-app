@@ -9,7 +9,7 @@ ADD go.mod .
 ADD go.sum .
 RUN go mod download
 COPY . .
-RUN go build -ldflags="-s -w" -o /app/article ./main.go
+RUN go build -ldflags="-s -w" -o /app/article ./cmd/main.go
 
 FROM alpine
 RUN apk update --no-cache && apk add --no-cache ca-certificates
@@ -17,4 +17,8 @@ RUN apk update --no-cache && apk add --no-cache ca-certificates
 WORKDIR /app
 EXPOSE 8080
 COPY --from=builder /app/article /app/article
-CMD ["./hello"]
+COPY --from=builder /build/cmd/.env /app/.env
+RUN mkdir configs
+COPY --from=builder /build/configs /app/configs
+
+CMD ["./article"]

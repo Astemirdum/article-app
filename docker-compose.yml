@@ -9,6 +9,8 @@ services:
       - db
     environment:
       - DB_PASSWORD=postgres
+    networks:
+      - rest-api
     
   db:
     restart: always
@@ -19,4 +21,8 @@ services:
       - 5432:5432
     environment:
       - POSTGRES_PASSWORD=postgres
-  
+    networks:
+      - rest-api
+
+networks:
+  rest-api:

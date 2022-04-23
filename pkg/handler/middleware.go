@@ -21,7 +21,7 @@ func (h *Handler) UserIdentification(ctx *gin.Context) {
 	}
 
 	headerTokenParts := strings.Split(headerToken, " ")
-
+	h.log.Infof("%v", headerTokenParts)
 	if len(headerTokenParts) != 2 || headerTokenParts[0] != "Bearer" {
 		ErrorResponse(ctx, http.StatusUnauthorized, "invalid header Authorization")
 		return
