@@ -1,8 +1,7 @@
 package repository
 
 import (
-	"article/models"
-
+	"github.com/Astemirdum/article-app/models"
 	"github.com/jmoiron/sqlx"
 )
 

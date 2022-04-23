@@ -1,14 +1,14 @@
 package service
 
 import (
-	"article/models"
-	"article/pkg/repository"
 	"crypto/sha1"
 	"errors"
 	"fmt"
 	"time"
 
-	"github.com/dgrijalva/jwt-go"
+	"github.com/Astemirdum/article-app/models"
+	"github.com/Astemirdum/article-app/pkg/repository"
+	"github.com/golang-jwt/jwt"
 )
 
 const (

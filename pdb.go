@@ -10,14 +10,14 @@ import (
 type ConfigDB struct {
 	Username string
 	Host     string
-	Port     string
+	Port     int
 	Dbname   string
 	Sslmode  string
 	Password string
 }
 
 func NewPdb(conf *ConfigDB) (*sqlx.DB, error) {
-	dsn := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=%s",
+	dsn := fmt.Sprintf("host=%s port=%d user=%s dbname=%s password=%s sslmode=%s",
 		conf.Host, conf.Port, conf.Username, conf.Dbname, conf.Password, conf.Sslmode)
 	db, err := sqlx.Open("postgres", dsn)
 	if err != nil {

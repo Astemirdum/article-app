@@ -6,8 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"article/pkg/service"
-	service_mocks "article/pkg/service/mocks"
+	"github.com/Astemirdum/article-app/pkg/service"
+	service_mocks "github.com/Astemirdum/article-app/pkg/service/mocks"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang/mock/gomock"

@@ -1,8 +1,8 @@
 package repository
 
 import (
-	"article/models"
 	"fmt"
+	"github.com/Astemirdum/article-app/models"
 
 	"github.com/jmoiron/sqlx"
 )

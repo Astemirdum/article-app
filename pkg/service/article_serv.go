@@ -1,9 +1,9 @@
 package service
 
 import (
-	"article/models"
-	"article/pkg/repository"
 	"errors"
+	"github.com/Astemirdum/article-app/models"
+	"github.com/Astemirdum/article-app/pkg/repository"
 )
 
 type ArticleService struct {

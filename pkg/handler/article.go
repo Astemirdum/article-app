@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"article/models"
+	"github.com/Astemirdum/article-app/models"
 	"net/http"
 	"strconv"
 

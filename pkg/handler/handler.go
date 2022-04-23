@@ -1,9 +1,9 @@
 package handler
 
 import (
-	"article/pkg/service"
 	"net/http"
 
+	"github.com/Astemirdum/article-app/pkg/service"
 	"github.com/gin-gonic/gin"
 )
 
@@ -11,9 +11,9 @@ type Handler struct {
 	services *service.Service
 }
 
-func NewHandler(srvc *service.Service) *Handler {
+func NewHandler(srv *service.Service) *Handler {
 	return &Handler{
-		services: srvc,
+		services: srv,
 	}
 }
 

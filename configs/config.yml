@@ -1,9 +1,12 @@
-webport: "8080"
+
+service:
+  addr: "localhost"
+  webport: 8080
 
 db:
   username: "postgres"
   host: "localhost"
-  port: "5436"
+  port: 5436
   dbname: "postgres"
   sslmode: "disable"
   

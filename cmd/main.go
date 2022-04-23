@@ -1,20 +1,21 @@
 package main
 
 import (
-	"article"
 	"context"
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
+	"github.com/Astemirdum/article-app"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 
-	"article/pkg/handler"
-	"article/pkg/repository"
-	"article/pkg/service"
+	"github.com/Astemirdum/article-app/pkg/handler"
+	"github.com/Astemirdum/article-app/pkg/repository"
+	"github.com/Astemirdum/article-app/pkg/service"
 )
 
 func main() {
@@ -30,7 +31,7 @@ func main() {
 	db, err := article.NewPdb(&article.ConfigDB{
 		Username: viper.GetString("db.username"),
 		Host:     viper.GetString("db.host"),
-		Port:     viper.GetString("db.port"),
+		Port:     viper.GetInt("db.port"),
 		Dbname:   viper.GetString("db.dbname"),
 		Sslmode:  viper.GetString("db.sslmode"),
 		Password: os.Getenv("DB_PASSWORD"),
@@ -44,10 +45,14 @@ func main() {
 	services := service.NewService(repos)
 	handlers := handler.NewHandler(services)
 
-	serv := article.NewServer(viper.GetString("webport"), handlers.NewRouter())
+	serv := article.NewServer(handlers.NewRouter(),
+		article.AddrHttp{
+			Addr: viper.GetString("service.addr"),
+			Port: viper.GetInt("service.webport"),
+		})
 	go func() {
 		if err := serv.Run(); err != nil {
-			log.Fatalf("Server init %s", err.Error())
+			log.Fatalf("Server init %v", err)
 		}
 	}()
 	log.Println("Server has been started")
@@ -56,11 +61,13 @@ func main() {
 	<-quit
 
 	log.Println("Graceful shutdown")
-	if err := serv.Shutdown(context.Background()); err != nil {
-		log.Errorf("Server Shutdown %s", err.Error())
+	ctx, cancelFn := context.WithTimeout(context.Background(), time.Second)
+	defer cancelFn()
+	if err := serv.Shutdown(ctx); err != nil {
+		log.Errorf("Server Shutdown %v", err)
 	}
 	if err := db.Close(); err != nil {
-		log.Errorf("db connection close: %s", err.Error())
+		log.Errorf("db connection close: %v", err)
 	}
 }
 
