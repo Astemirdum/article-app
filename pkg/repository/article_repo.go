@@ -2,9 +2,9 @@ package repository
 
 import (
 	"fmt"
-	"github.com/Astemirdum/article-app/models"
 	"strings"
 
+	"github.com/Astemirdum/article-app/models"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -27,13 +27,13 @@ func (a *ArticlePostgres) Create(userId int, art models.Article) (int, error) {
 	row := tx.QueryRow(query, art.Title, art.Text)
 
 	if err = row.Scan(&id); err != nil {
-		tx.Rollback()
+		_ = tx.Rollback()
 		return 0, err
 	}
 	query = fmt.Sprintf("INSERT INTO %s (user_id, article_id) VALUES ($1, $2)", userArticleTable)
 	_, err = tx.Exec(query, userId, id)
 	if err != nil {
-		tx.Rollback()
+		_ = tx.Rollback()
 		return 0, err
 	}
 
@@ -48,8 +48,8 @@ func (a *ArticlePostgres) Delete(userId, articleId int) error {
 }
 func (a *ArticlePostgres) Update(userId, articleId int, upArt models.UpdateArticle) error {
 
-	setArgs := []string{}
-	args := []interface{}{}
+	setArgs := make([]string, 0)
+	args := make([]any, 0)
 	c := 1
 	if upArt.Title != "" {
 		setArgs = append(setArgs, fmt.Sprintf("title=$%d", c))

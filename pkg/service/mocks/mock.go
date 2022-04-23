@@ -5,9 +5,9 @@
 package mock_service
 
 import (
-	models "article/models"
 	reflect "reflect"
 
+	models "github.com/Astemirdum/article-app/models"
 	gomock "github.com/golang/mock/gomock"
 )
 

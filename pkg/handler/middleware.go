@@ -33,9 +33,12 @@ func (h *Handler) UserIdentification(ctx *gin.Context) {
 	}
 	userId, err := h.services.ParseToken(token)
 	if err != nil {
+		h.log.Errorf("parse token fail %v", err)
 		ErrorResponse(ctx, http.StatusUnauthorized, err.Error())
 		return
 	}
+
+	h.log.Infof("userIdentification userid = %d with token %s", userId, token)
 	ctx.Set(idKey, userId)
 }
 

@@ -29,7 +29,7 @@ type Repository struct {
 	ArticleItem
 }
 
-func NewRepostory(db *sqlx.DB) *Repository {
+func NewRepository(db *sqlx.DB) *Repository {
 	return &Repository{
 		Authorization: NewAuth(db),
 		ArticleItem:   NewArticlePostgres(db),

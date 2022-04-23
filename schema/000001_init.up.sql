@@ -7,7 +7,7 @@ CREATE TABLE users (
 
 CREATE TABLE articles (
     id serial           NOT NULL UNIQUE,
-    title varchar(256)  NOT NULL,
+    title text          NOT NULL check (length(title) < 255),
     thesis text         NOT NULL,
     pub_time time       NOT NULL DEFAULT NOW()
 );

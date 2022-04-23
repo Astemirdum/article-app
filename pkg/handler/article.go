@@ -1,24 +1,24 @@
 package handler
 
 import (
-	"github.com/Astemirdum/article-app/models"
 	"net/http"
 	"strconv"
 
+	"github.com/Astemirdum/article-app/models"
 	"github.com/gin-gonic/gin"
-	log "github.com/sirupsen/logrus"
 )
 
 func (h *Handler) GetAllArticles(ctx *gin.Context) {
-
 	userId, err := getUserId(ctx)
 	if err != nil {
-		log.Debug("getUserId fetch userId")
+		h.log.Errorf("getUserId fetch userId %v", err)
 		ErrorResponse(ctx, http.StatusInternalServerError, err.Error())
 		return
 	}
+
 	articles, err := h.services.SelectAll(userId)
 	if err != nil {
+		h.log.Errorf("selectAll articles %v", err)
 		ErrorResponse(ctx, http.StatusInternalServerError, err.Error())
 		return
 	}
@@ -67,6 +67,8 @@ func (h *Handler) CreateArticle(ctx *gin.Context) {
 		ErrorResponse(ctx, http.StatusInternalServerError, err.Error())
 		return
 	}
+
+	h.log.Infof("article has been created %d by user %d", artId, userId)
 	ctx.JSON(http.StatusOK, gin.H{"article Id": artId})
 }
 
@@ -86,7 +88,7 @@ func (h *Handler) DeleteArticle(ctx *gin.Context) {
 		ErrorResponse(ctx, http.StatusInternalServerError, err.Error())
 		return
 	}
-
+	h.log.Infof("article has been deleted %d by user %d", artId, userId)
 	ctx.JSON(http.StatusOK, gin.H{"delete": "ok"})
 }
 
@@ -112,5 +114,6 @@ func (h *Handler) UpdateArticle(ctx *gin.Context) {
 		ErrorResponse(ctx, http.StatusInternalServerError, err.Error())
 		return
 	}
+	h.log.Infof("article has been updated %d by user %d", artId, userId)
 	ctx.JSON(http.StatusOK, gin.H{"update": "ok"})
 }

@@ -2,7 +2,7 @@ SERVICE_NAME = article-app
 
 TEST_FLAGS = ./...
 
-DB_URL = 'postgres://postgres:postgres@0.0.0.0:5432/postgres?sslmode=disable'
+#DB_URL = 'postgres://postgres:postgres@0.0.0.0:5432/postgres?sslmode=disable'
 
 build:
 	docker-compose build $(SERVICE_NAME)	
@@ -12,10 +12,10 @@ run:
 test:
 	go test -v $(TEST_FLAGS)
 
-migrate:
-	migrate -path ./schema -database $(DB_URL) up
+#migrate:
+#	migrate -path ./schema -database $(DB_URL) up
 
 clean:
-	rm -rf article-app
+	rm -rf ${SERVICE_NAME}
 
-.PHONY: build, run, migrate, test, clean
+.PHONY: build, run, test, clean

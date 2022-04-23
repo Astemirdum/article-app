@@ -5,7 +5,7 @@ import (
 	"github.com/Astemirdum/article-app/pkg/repository"
 )
 
-//go:generate mockgen -source=service.go -destination=mocks/mock.go
+//go:generate go run github.com/golang/mock/mockgen -source=service.go -destination=mocks/mock.go
 
 type Service struct {
 	Authorization

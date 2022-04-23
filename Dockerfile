@@ -1,18 +1,20 @@
-FROM golang:1.16
+FROM golang:1.18-alpine AS builder
+LABEL stage=gobuilder
 
-RUN go version
-ENV GOPATH=/
-
-COPY ./ ./
-
-RUN go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
-
-EXPOSE 8080
-
-RUN apt-get update
-RUN apt-get -y install postgresql-client
-
+ENV CGO_ENABLED 0
+ENV GOOS linux
+RUN apk update --no-cache && apk add --no-cache tzdata
+WORKDIR /build
+ADD go.mod .
+ADD go.sum .
 RUN go mod download
-RUN go build -o article-app ./cmd/main.go
+COPY . .
+RUN go build -ldflags="-s -w" -o /app/article ./main.go
 
-CMD ["./article-app"]
+FROM alpine
+RUN apk update --no-cache && apk add --no-cache ca-certificates
+
+WORKDIR /app
+EXPOSE 8080
+COPY --from=builder /app/article /app/article
+CMD ["./hello"]

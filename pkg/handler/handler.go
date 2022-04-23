@@ -5,21 +5,19 @@ import (
 
 	"github.com/Astemirdum/article-app/pkg/service"
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 )
 
 type Handler struct {
 	services *service.Service
+	log      *logrus.Logger
 }
 
-func NewHandler(srv *service.Service) *Handler {
+func NewHandler(srv *service.Service, logger *logrus.Logger) *Handler {
 	return &Handler{
 		services: srv,
+		log:      logger,
 	}
-}
-
-type Index struct {
-	EndPoint    string `json:"endpoint"`
-	Description string `json:"description"`
 }
 
 func (h *Handler) NewRouter() *gin.Engine {
@@ -45,6 +43,11 @@ func (h *Handler) NewRouter() *gin.Engine {
 	}
 
 	return router
+}
+
+type Index struct {
+	EndPoint    string `json:"endpoint"`
+	Description string `json:"description"`
 }
 
 func IndexHandler(c *gin.Context) {

@@ -10,7 +10,7 @@ import (
 	"github.com/Astemirdum/article-app"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
-	log "github.com/sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 
 	"github.com/Astemirdum/article-app/pkg/handler"
@@ -19,7 +19,8 @@ import (
 )
 
 func main() {
-	log.SetFormatter(&log.JSONFormatter{})
+	log := logrus.New()
+	log.SetFormatter(&logrus.JSONFormatter{})
 
 	if err := initConfigs(); err != nil {
 		log.Fatalf("initConfigs %s", err.Error())
@@ -39,11 +40,10 @@ func main() {
 	if err != nil {
 		log.Fatalf(" Postgres DB init %s", err.Error())
 	}
-
 	// repo -> service -> handler
-	repos := repository.NewRepostory(db)
+	repos := repository.NewRepository(db)
 	services := service.NewService(repos)
-	handlers := handler.NewHandler(services)
+	handlers := handler.NewHandler(services, log)
 
 	serv := article.NewServer(handlers.NewRouter(),
 		article.AddrHttp{
@@ -72,7 +72,7 @@ func main() {
 }
 
 func initConfigs() error {
-	viper.AddConfigPath("configs")
+	viper.AddConfigPath("../configs")
 	viper.SetConfigName("config")
 	return viper.ReadInConfig()
 }

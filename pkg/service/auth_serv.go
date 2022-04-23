@@ -37,7 +37,7 @@ func (a *AuthService) CreateUser(user models.User) (int, error) {
 
 func (a *AuthService) ParseToken(accessToken string) (int, error) {
 	jwtToken, err := jwt.ParseWithClaims(accessToken, &mytokenClaims{},
-		func(token *jwt.Token) (interface{}, error) {
+		func(token *jwt.Token) (any, error) {
 			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 				return nil, errors.New("wrong signing method")
 			}
