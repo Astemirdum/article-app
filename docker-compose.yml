@@ -3,16 +3,17 @@ version: '3.8'
 services:
   article-app:
     build: ./
+    command: ["./wait-for-it.sh", "postgres:5432", "--timeout=60", "--", "./article"]
     ports:
       - 8080:8080
     depends_on:
-      - db
+      - postgres
     environment:
       - DB_PASSWORD=postgres
     networks:
       - rest-api
     
-  db:
+  postgres:
     restart: always
     image: postgres:latest
     volumes:
@@ -20,7 +21,9 @@ services:
     ports:
       - 5432:5432
     environment:
+      - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
     networks:
       - rest-api
 

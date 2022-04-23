@@ -19,6 +19,10 @@ import (
 )
 
 func main() {
+
+	//fmt.Println("serving")
+	//http.ListenAndServe(":8080", nil)
+
 	log := logrus.New()
 	log.SetFormatter(&logrus.JSONFormatter{})
 
