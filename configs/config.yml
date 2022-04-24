@@ -1,4 +1,3 @@
-
 service:
   addr: "localhost"
   webport: 8080

@@ -8,9 +8,9 @@ import (
 
 	"github.com/Astemirdum/article-app/pkg/service"
 	service_mocks "github.com/Astemirdum/article-app/pkg/service/mocks"
-
 	"github.com/gin-gonic/gin"
 	"github.com/golang/mock/gomock"
+	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -77,7 +77,7 @@ func TestHandlerUserIdent(t *testing.T) {
 			expectedResponseBody: `{"message":"invalid token"}`,
 		},
 	}
-
+	logger := logrus.New()
 	for _, testCase := range testTable {
 		t.Run(testCase.name, func(t *testing.T) {
 			c := gomock.NewController(t)
@@ -86,7 +86,10 @@ func TestHandlerUserIdent(t *testing.T) {
 			auth := service_mocks.NewMockAuthorization(c)
 			testCase.mockBehavior(auth, testCase.token)
 
-			handler := Handler{&service.Service{Authorization: auth}}
+			handler := Handler{
+				services: &service.Service{Authorization: auth},
+				log:      logger,
+			}
 
 			r := gin.New()
 			r.GET("/identity", handler.UserIdentification, func(c *gin.Context) {

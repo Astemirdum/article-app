@@ -6,7 +6,8 @@ TEST_FLAGS = ./...
 
 build:
 	docker-compose build $(SERVICE_NAME)	
-run: 
+
+run:
 	docker-compose up $(SERVICE_NAME)	
 
 test:
@@ -15,7 +16,4 @@ test:
 #migrate:
 #	migrate -path ./schema -database $(DB_URL) up
 
-clean:
-	rm -rf ${SERVICE_NAME}
-
-.PHONY: build, run, test, clean
+.PHONY: build, run, test

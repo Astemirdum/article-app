@@ -18,8 +18,6 @@ WORKDIR /app
 EXPOSE 8080
 COPY --from=builder /app/article /app/article
 COPY --from=builder /build/cmd/.env /app/.env
-COPY --from=builder /build/cmd/wait-for-it.sh /app/wait-for-it.sh
 RUN mkdir configs
 COPY --from=builder /build/configs /app/configs
-
 CMD ["./article"]

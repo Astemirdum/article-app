@@ -3,7 +3,6 @@ version: '3.8'
 services:
   article-app:
     build: ./
-    command: ["./wait-for-it.sh", "postgres:5432", "--timeout=60", "--", "./article"]
     ports:
       - 8080:8080
     depends_on:

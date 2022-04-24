@@ -19,10 +19,6 @@ import (
 )
 
 func main() {
-
-	//fmt.Println("serving")
-	//http.ListenAndServe(":8080", nil)
-
 	log := logrus.New()
 	log.SetFormatter(&logrus.JSONFormatter{})
 
@@ -59,7 +55,7 @@ func main() {
 			log.Fatalf("Server init %v", err)
 		}
 	}()
-	log.Println("Server has been started")
+	log.Printf("Server has been started on %s:%d", viper.GetString("service.addr"), viper.GetInt("service.webport"))
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, os.Interrupt, syscall.SIGTERM)
 	<-quit
@@ -77,6 +73,7 @@ func main() {
 
 func initConfigs() error {
 	viper.AddConfigPath("configs")
+	viper.AddConfigPath("../configs")
 	viper.SetConfigName("config")
 	return viper.ReadInConfig()
 }
